@@ -10,7 +10,7 @@ This is an example app from "2.3 Bonus app".
 
 ```bash
 npm install
-npm run dev
+npm run start:dev
 ```
 
 3. Open your browser at `localhost:5000`.

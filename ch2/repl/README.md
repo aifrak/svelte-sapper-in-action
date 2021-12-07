@@ -10,7 +10,7 @@ This app was exported from the REPL from `svelte.dev` following the steps from "
 
 ```bash
 npm install
-npm run dev
+npm run start:dev
 ```
 
 3. Open your browser at `localhost:5000`.

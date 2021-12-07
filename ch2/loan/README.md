@@ -10,7 +10,7 @@ This is an example app from "2.2.4 Your first non-REPL app".
 
 ```bash
 npm install
-npm run dev
+npm run start:dev
 ```
 
 3. Open your browser at `localhost:5000`.
