@@ -1,0 +1,73 @@
+{
+  "editor.rulers": [80],
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+
+  // Files:
+  "files.watcherExclude": {
+    "**/.git": true,
+    // VSCode
+    "**/.history/**": true,
+    // NodeJS
+    "**/node_modules/**": true,
+    "**/npm_cache/**": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.history": true
+  },
+
+  // Search:
+  "search.exclude": {
+    "**/.git": true,
+    // VSCode
+    "**/.history/**": true,
+    // NodeJS
+    "**/node_modules": true,
+    "**/npm_cache": true
+  },
+
+  // Prettier:
+  "prettier.useEditorConfig": true,
+
+  // Shellformat:
+  "shellformat.useEditorConfig": true,
+
+  // Markdown All in One:
+  "markdown.extension.orderedList.marker": "one",
+
+  // Override languages:
+  "[dockerfile]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[html]": {
+    "editor.rulers": [120]
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [100]
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "files.trimTrailingWhitespace": false
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // VSCode icons:
+  "vsicons.associations.files": [
+    {
+      "icon": "docker",
+      "extensions": ["docker-compose.dev.yml", "docker-compose.override.yml"],
+      "filename": true
+    }
+  ]
+}

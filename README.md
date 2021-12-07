@@ -1,2 +1,3 @@
-# svelte-sapper-in-action-exercises
-My solution to the exercises from 'Svelte and Sapper in action'.
+# Svelte and Sapper in Action
+
+Code for 'Svelte and Sapper in Action'.

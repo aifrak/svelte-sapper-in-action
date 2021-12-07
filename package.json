@@ -1,0 +1,11 @@
+{
+  "name": "svelte-sapper-in-action",
+  "devDependencies": {
+    "prettier": "2.5.0",
+    "prettier-plugin-svelte": "2.5.0"
+  },
+  "engines": {
+    "node": "16",
+    "npm": "8"
+  }
+}

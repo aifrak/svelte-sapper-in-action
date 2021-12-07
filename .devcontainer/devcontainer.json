@@ -1,0 +1,28 @@
+{
+  "name": "svelte-sapper-in-action",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "../docker-compose.dev.yml",
+    "docker-compose.yml"
+  ],
+  "service": "app",
+  "workspaceFolder": "/app",
+  "extensions": [
+    // EditorConfig
+    "editorconfig.editorconfig",
+
+    // Formatters:
+    "esbenp.prettier-vscode",
+
+    // Shell:
+    "foxundermoon.shell-format",
+
+    // Markdown
+    "yzhang.markdown-all-in-one",
+
+    // Svelte:
+    "svelte.svelte-vscode",
+    "fivethree.vscode-svelte-snippets",
+    "ardenivanov.svelte-intellisense"
+  ]
+}

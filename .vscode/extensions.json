@@ -1,0 +1,28 @@
+{
+  "recommendations": [
+    // Remote container
+    "ms-vscode-remote.remote-containers",
+
+    // EditorConfig:
+    "editorconfig.editorconfig",
+
+    // Docker:
+    "ms-azuretools.vscode-docker",
+
+    // Formatters:
+    "esbenp.prettier-vscode",
+
+    // Shell:
+    "foxundermoon.shell-format",
+
+    // Markdown
+    "yzhang.markdown-all-in-one",
+
+    // Svelte:
+    "svelte.svelte-vscode",
+    "fivethree.vscode-svelte-snippets",
+    "ardenivanov.svelte-intellisense"
+  ],
+
+  "unwantedRecommendations": []
+}

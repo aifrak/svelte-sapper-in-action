@@ -1,0 +1,7 @@
+version: "3.9"
+
+services:
+  app:
+    image: aifrak/svelte-sapper-in-action:dev
+    build:
+      target: dev
