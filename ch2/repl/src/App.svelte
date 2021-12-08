@@ -1,8 +1,8 @@
 <script>
-  import Clock from "./Clock.svelte";
+  import Clock from './Clock.svelte';
 
-  let color = "red";
-  let name = "world";
+  let color = 'red';
+  let name = 'world';
 
   let upper = false;
   $: greeting = `Hello ${name}!`;

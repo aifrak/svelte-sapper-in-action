@@ -21,6 +21,7 @@ quote_type = single
 
 [*.svelte]
 max_line_length = 120
+quote_type = single
 
 [Dockerfile*]
 binary_next_line = true

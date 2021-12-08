@@ -1,6 +1,6 @@
 <script>
-  export let color = "blue";
-  let hhmmss = "";
+  export let color = 'blue';
+  let hhmmss = '';
   setInterval(() => {
     hhmmss = new Date().toLocaleTimeString();
   }, 1000);

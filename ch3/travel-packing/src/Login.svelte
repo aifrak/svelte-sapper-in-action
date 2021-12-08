@@ -10,11 +10,11 @@
   <form on:submit|preventDefault={login}>
     <label>
       Username
-      <input required bind:value={username}>
+      <input required bind:value={username} />
     </label>
     <label>
       Password
-      <input type="password" required bind:value={password}>
+      <input type="password" required bind:value={password} />
     </label>
     <div class="buttons">
       <button>Login</button>
