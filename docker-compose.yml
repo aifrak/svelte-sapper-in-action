@@ -12,6 +12,9 @@ services:
     user: ${USER_UID:-1000}:${USER_GID:-1000}
     command: sleep infinity
     ports:
+      # Port for svelte dev server
       - 5000:5000
+      # Port for svelte live-reload
+      - 35729:35729
     volumes:
       - .:/app
