@@ -20,7 +20,6 @@ max_line_length = 100
 quote_type = single
 
 [*.svelte]
-max_line_length = 120
 quote_type = single
 
 [Dockerfile*]

@@ -6,7 +6,9 @@
     const res = await fetch('http://dummy.restapiexample.com/api/v1/employees');
     const json = await res.json();
     if (json.status === 'success') {
-      return json.data.sort((e1, e2) => e1.employee_name.localeCompare(e2.employee_name));
+      return json.data.sort((e1, e2) =>
+        e1.employee_name.localeCompare(e2.employee_name)
+      );
     } else {
       throw new Error(json.status);
     }

@@ -8,7 +8,12 @@
   $: monthlyInterestRate = interestRate / 100 / MONTHS_PER_YEAR;
   $: numerator = loanAmount * monthlyInterestRate;
   $: denominator = 1 - (1 + monthlyInterestRate) ** -months;
-  $: payment = !loanAmount || !years ? 0 : interestRate ? numerator / denominator : loanAmount / months;
+  $: payment =
+    !loanAmount || !years
+      ? 0
+      : interestRate
+      ? numerator / denominator
+      : loanAmount / months;
 </script>
 
 <label for="loan">Loan Amount</label>

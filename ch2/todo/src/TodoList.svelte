@@ -7,7 +7,10 @@
 
   let todoText = '';
 
-  let todos = [createTodo('learn Svelte', true), createTodo('build a Svelte app')];
+  let todos = [
+    createTodo('learn Svelte', true),
+    createTodo('build a Svelte app'),
+  ];
 
   $: uncompletedCount = todos.filter((t) => !t.done).length;
 
@@ -44,7 +47,11 @@
   </form>
   <ul>
     {#each todos as todo}
-      <Todo {todo} on:delete={() => deleteTodo(todo.id)} on:toggleDone={() => toggleDone(todo)} />
+      <Todo
+        {todo}
+        on:delete={() => deleteTodo(todo.id)}
+        on:toggleDone={() => toggleDone(todo)}
+      />
     {/each}
   </ul>
 </div>
