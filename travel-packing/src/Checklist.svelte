@@ -13,6 +13,25 @@
   let message = '';
   let show = 'all';
 
+  let dragAndDrop = {
+    drag(event, categoryId, itemId) {
+      const data = { categoryId, itemId };
+      event.dataTransfer.setData('text/plain', JSON.stringify(data));
+    },
+    drop(event, categoryId) {
+      const json = event.dataTransfer.getData('text/plain');
+      const data = JSON.parse(json);
+
+      const category = categories[data.categoryId];
+      const item = category.items[data.itemId];
+      delete category.items[data.itemId];
+
+      categories[categoryId].items[data.itemId] = item;
+
+      categories = categories;
+    },
+  };
+
   $: categoryArray = sortOnName(Object.values(categories));
 
   function addCategory() {
@@ -113,6 +132,7 @@
         {show}
         on:delete={() => deleteCategory(category)}
         on:persist={persist}
+        dnd={dragAndDrop}
       />
     {/each}
   </div>

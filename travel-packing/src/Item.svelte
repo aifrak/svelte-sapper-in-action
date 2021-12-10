@@ -2,6 +2,8 @@
   import { createEventDispatcher } from 'svelte';
   import { blurOnKey } from './util';
 
+  export let categoryId;
+  export let dnd; // dnd = drag and drop
   export let item;
 
   const dispatch = createEventDispatcher();
@@ -9,7 +11,7 @@
   let editing = false;
 </script>
 
-<li>
+<li draggable="true" on:dragstart={event => dnd.drag(event, categoryId, item.id)}>
   <input type="checkbox" bind:checked={item.packed} />
   {#if editing}
     <input

@@ -6,11 +6,14 @@
 
   export let categories;
   export let category;
+  export let dnd;
   export let show;
 
   const dispatch = createEventDispatcher();
+
   let dialog = null;
   let editing = false;
+  let hovering = false;
   let itemName = '';
   let items = [];
   let message = '';
@@ -56,7 +59,19 @@
   }
 </script>
 
-<section>
+<section
+  class:hover={hovering}
+  on:dragenter={() => (hovering = true)}
+  on:dragleave={(event) => {
+    const { localName } = event.target;
+    if (localName === 'section') hovering = false;
+  }}
+  on:drop|preventDefault={(event) => {
+    dnd.drop(event, category.id);
+    hovering = false;
+  }}
+  on:dragover|preventDefault
+>
   <h3>
     {#if editing}
       <input
@@ -85,7 +100,12 @@
     {#each itemsToShow as item (item.id)}
       <!-- This bind causes the category object to update
         when the item packed value is toggled. -->
-      <Item bind:item on:delete={() => deleteItem(item)} />
+      <Item
+        bind:item
+        on:delete={() => deleteItem(item)}
+        categoryId={category.id}
+        {dnd}
+      />
     {:else}
       <div>This category does not contain any items yet.</div>
     {/each}
@@ -138,5 +158,9 @@
     list-style: none;
     margin: 0;
     padding-left: 0;
+  }
+
+  .hover {
+    border-color: orange;
   }
 </style>
