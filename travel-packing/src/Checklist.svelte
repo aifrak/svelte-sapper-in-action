@@ -1,10 +1,12 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import Category from './Category.svelte';
+  import Dialog from './Dialog.svelte';
   import { getGuid, sortOnName } from './util';
 
   const dispatch = createEventDispatcher();
 
+  let dialog = null;
   let categoryArray = [];
   let categories = {};
   let categoryName;
@@ -19,7 +21,7 @@
     );
     if (duplicate) {
       message = `The category "${categoryName}" already exists.`;
-      alert(message);
+      dialog.showModal();
       return;
     }
 
@@ -39,6 +41,12 @@
   }
 
   function deleteCategory(category) {
+    if (Object.values(category.items).length) {
+      message = 'This category is not empty.';
+      dialog.showModal();
+      return;
+    }
+
     delete categories[category.id];
     categories = categories;
   }
@@ -108,6 +116,10 @@
       />
     {/each}
   </div>
+
+  <Dialog title="Checklist" bind:dialog>
+    <div>{message}</div>
+  </Dialog>
 </section>
 
 <style>
