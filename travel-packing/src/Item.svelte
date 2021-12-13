@@ -9,9 +9,14 @@
   const dispatch = createEventDispatcher();
 
   let editing = false;
+
+  $: if (editing) console.log('editing item', item.name);
 </script>
 
-<li draggable="true" on:dragstart={event => dnd.drag(event, categoryId, item.id)}>
+<li
+  draggable="true"
+  on:dragstart={(event) => dnd.drag(event, categoryId, item.id)}
+>
   <input type="checkbox" bind:checked={item.packed} />
   {#if editing}
     <input

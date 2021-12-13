@@ -94,6 +94,8 @@
   in:scale={options}
   out:spin={options}
 >
+  {@debug status}
+
   <h3>
     {#if editing}
       <input
