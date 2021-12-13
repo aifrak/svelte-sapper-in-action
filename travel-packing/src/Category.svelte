@@ -94,7 +94,7 @@
   in:scale={options}
   out:spin={options}
 >
-  {@debug status}
+  <!-- {@debug status} -->
 
   <h3>
     {#if editing}
@@ -115,7 +115,7 @@
   <form on:submit|preventDefault={addItem}>
     <label>
       New Item
-      <input bind:value={itemName} />
+      <input data-testid="item-input" required bind:value={itemName} />
     </label>
     <button disabled={!itemName}>Add Item</button>
   </form>
@@ -136,11 +136,11 @@
       <div>This category does not contain any items yet.</div>
     {/each}
   </ul>
-
-  <Dialog title="Category" bind:dialog>
-    <div>{message}</div>
-  </Dialog>
 </section>
+
+<Dialog title="Category" bind:dialog>
+  <div>{message}</div>
+</Dialog>
 
 <style>
   button,
