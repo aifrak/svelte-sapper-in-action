@@ -42,7 +42,12 @@
     <button on:click={archiveCompleted}>Archive Completed</button>
   </div>
   <form on:submit|preventDefault>
-    <input size="30" placeholder="enter new todo here" bind:value={todoText} />
+    <input
+      data-testid="todo-input"
+      size="30"
+      placeholder="enter new todo here"
+      bind:value={todoText}
+    />
     <button disabled={!todoText} on:click={addTodo}>Add</button>
   </form>
   <ul>
