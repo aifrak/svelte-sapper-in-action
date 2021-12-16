@@ -14,3 +14,27 @@ npm run start:dev
 ```
 
 3. Open your browser at `localhost:5000`.
+
+# How to run tests?
+
+Be sure to have run `npm install`.
+
+## Unit tests
+
+```bash
+npm run test
+```
+
+## End-To-End tests
+
+We need to enter the `cypress` container.
+To do so, open the terminal from the host and run this command:
+
+```bash
+npm run cy:dc:exec
+```
+
+Inside the terminal from the `cypress` container, you can run any `cypress` command or those aliases:
+
+- `npm run cy:open`
+- `npm run cy:run`
