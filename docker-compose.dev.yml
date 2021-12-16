@@ -9,9 +9,9 @@ services:
       - 5000
     ports:
       # Port for svelte dev server
-      - 5000:5000
+      - 127.0.0.1:5000:5000
       # Port for svelte live-reload
-      - 35729:35729
+      - 127.0.0.1:35729:35729
 
   # Service to run cypress (npm run "cy:open" and npm run "cy:run")
   cypress:
