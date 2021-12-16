@@ -152,7 +152,7 @@
     border: none;
   }
 
-  h3 {
+  h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
