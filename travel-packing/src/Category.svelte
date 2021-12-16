@@ -96,7 +96,7 @@
 >
   <!-- {@debug status} -->
 
-  <h3>
+  <h2>
     {#if editing}
       <input
         bind:value={category.name}
@@ -110,7 +110,7 @@
     <button class="icon" on:click={() => dispatch('delete')}>
       &#x1F5D1;
     </button>
-  </h3>
+  </h2>
 
   <form on:submit|preventDefault={addItem}>
     <label>

@@ -8,7 +8,10 @@
     "start": "sirv public --single",
     "start:dev": "HOST=0.0.0.0 PORT=5000 npm run dev",
     "test": "jest src",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "cy:dc:exec": "bash cypress_docker_exec.sh",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -16,6 +19,8 @@
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@testing-library/svelte": "^3.0.3",
+    "@types/cypress": "^1.1.3",
+    "@types/jest": "^27.0.3",
     "babel-jest": "^27.4.4",
     "jest": "^27.4.4",
     "rollup": "^2.3.4",
