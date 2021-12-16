@@ -5,3 +5,10 @@ services:
     image: aifrak/svelte-sapper-in-action:dev
     build:
       target: dev
+    expose:
+      - 5000
+    ports:
+      # Port for svelte dev server
+      - 5000:5000
+      # Port for svelte live-reload
+      - 35729:35729
