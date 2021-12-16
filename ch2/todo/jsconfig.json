@@ -1,0 +1,4 @@
+{
+  "include": ["cypress/**/*.js", "src/**/*.js", "src/**/*.svelte"],
+  "exclude": ["node_modules", "**/node_modules"]
+}

@@ -1,4 +1,8 @@
 node_modules/
 /public/build/
 
+/cypress/downloads/
+/cypress/screenshots/
+/cypress/videos/
+
 .DS_Store

@@ -12,3 +12,19 @@ services:
       - 5000:5000
       # Port for svelte live-reload
       - 35729:35729
+
+  # Service to run cypress (npm run "cy:open" and npm run "cy:run")
+  cypress:
+    # Setup inspired from https://www.cypress.io/blog/2019/05/02/run-cypress-with-a-single-docker-command/
+    image: cypress/included:9.1.1
+    depends_on:
+      - frontend
+    entrypoint: []
+    command: sleep infinity
+    user: ${USER_UID:-1000}:${USER_GID:-1000}
+    environment:
+      - DISPLAY
+    volumes_from:
+      - frontend
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
