@@ -25,13 +25,18 @@
 
 <style>
   :global(body) {
-    background-color: cornflowerblue;
+    background-color: var(--primary-color);
+  }
+
+  :root {
+    --heading-bg-color: #a3660a;
+    --primary-color: #3f6fde;
   }
 
   .hero {
     --height: 7rem;
 
-    background-color: orange;
+    background-color: var(--heading-bg-color);
     color: white;
     font-size: 4rem;
     height: var(--height);
