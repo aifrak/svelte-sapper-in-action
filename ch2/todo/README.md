@@ -36,5 +36,5 @@ npm run cy:dc:exec
 
 Inside the terminal from the `cypress` container, you can run any `cypress` command or those aliases:
 
-- `npm run cy:open`
+- `npm run cy:open` and browse `localhost:6006`
 - `npm run cy:run`
