@@ -28,3 +28,13 @@ Inside the terminal from the `cypress` container, you can run any `cypress` comm
 
 - `npm run cy:open` and browse `localhost:6006`
 - `npm run cy:run`
+
+## Build and start HTTP server
+
+```bash
+npm run build
+cd server
+npm run start
+```
+
+Browse `localhost:1234`.
