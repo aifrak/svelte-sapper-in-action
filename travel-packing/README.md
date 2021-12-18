@@ -31,8 +31,15 @@ Inside the terminal from the `cypress` container, you can run any `cypress` comm
 
 ## Build and start HTTP server
 
+1. Build:
+
 ```bash
 npm run build
+```
+
+2. Start HTTP server
+
+```bash
 cd server
 npm run start
 ```
