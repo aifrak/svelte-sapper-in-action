@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <!-- See README.md for documentation on using this. -->
 <script>
   import dialogPolyfill from 'dialog-polyfill';
