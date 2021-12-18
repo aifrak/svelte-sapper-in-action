@@ -89,6 +89,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Checklist</title>
+</svelte:head>
+
 <section>
   <header>
     <form on:submit|preventDefault={addCategory}>

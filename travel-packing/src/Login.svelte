@@ -10,6 +10,10 @@
   const dispatch = createEventDispatcher();
 </script>
 
+<svelte:head>
+  <title>Login</title>
+</svelte:head>
+
 <section>
   <form on:submit|preventDefault={login}>
     <label>

@@ -11,7 +11,22 @@
   page('/checklist', () => (component = Checklist));
   page('*', () => (component = NotFound));
   page.start();
+
+  const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  const dayName = days[new Date().getDay()];
 </script>
+
+<svelte:head>
+  <title>Today is {dayName}</title>
+</svelte:head>
 
 <main>
   <h1 class="hero">Travel Packing Checklist</h1>
