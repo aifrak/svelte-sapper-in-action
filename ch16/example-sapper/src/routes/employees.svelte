@@ -1,5 +1,6 @@
 <script context="module">
   export async function preload(page, session) {
+    console.log('employees.svelte preload: entered');
     try {
       // This is a free, public API service that returns fake employee data.
       const url = 'http://dummy.restapiexample.com/api/v1/employees';

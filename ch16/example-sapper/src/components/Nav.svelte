@@ -18,6 +18,7 @@
       <a
         aria-current={segment === 'employees' ? 'page' : undefined}
         href="employees"
+        rel="prefetch"
       >
         employees
       </a>
