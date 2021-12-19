@@ -1,56 +1,61 @@
 <script>
-  import successkid from 'images/successkid.jpg';
+  import items from '../items';
+  import { cartStore } from '../stores';
+
+  function changeQuantity(event, item) {
+    const newQuantity = Number(event.target.value);
+    cartStore.update((items) => {
+      // If the new quantity is not zero and the old quantity is zero ...
+      if (newQuantity && !item.quantity) {
+        items.push(item);
+        // If the new quantity is zero and the old quantity is not zero ...
+      } else if (newQuantity === 0 && item.quantity) {
+        const { description } = item;
+        // This removes the item from the cart.
+        items = items.filter((i) => i.description !== description);
+      }
+
+      item.quantity = newQuantity;
+
+      return items;
+    });
+  }
 </script>
 
 <svelte:head>
-  <title>Sapper project template</title>
+  <title>Shop</title>
 </svelte:head>
 
-<h1>Great success!</h1>
+<h1>Shop</h1>
 
-<figure>
-  <img alt="Success Kid" src={successkid} />
-  <figcaption>Have fun with Sapper!</figcaption>
-</figure>
-
-<p>
-  <strong
-    >Try editing this file (src/routes/index.svelte) to test live reloading.</strong
-  >
-</p>
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#each items as item}
+      <tr>
+        <td>{item.description}</td>
+        <td>${item.price.toFixed(2)}</td>
+        <td>
+          <input
+            type="number"
+            min="0"
+            on:input={(e) => changeQuantity(e, item)}
+            value={item.quantity}
+          />
+        </td>
+      </tr>
+    {/each}
+  </tbody>
+</table>
 
 <style>
-  h1,
-  figure,
-  p {
-    text-align: center;
-    margin: 0 auto;
-  }
-
-  h1 {
-    font-size: 2.8em;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin: 0 0 0.5em 0;
-  }
-
-  figure {
-    margin: 0 0 1em 0;
-  }
-
-  img {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 0 1em 0;
-  }
-
-  p {
-    margin: 1em auto;
-  }
-
-  @media (min-width: 480px) {
-    h1 {
-      font-size: 4em;
-    }
+  input {
+    width: 60px;
   }
 </style>
