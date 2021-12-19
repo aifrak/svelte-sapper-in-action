@@ -2,7 +2,7 @@
 .history/
 
 # NodeJS
-node_modules/
+/node_modules/
 npm_cache/
 
 # Docker compose

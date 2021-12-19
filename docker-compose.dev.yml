@@ -6,8 +6,11 @@ services:
     build:
       target: dev
     expose:
+      - 3000
       - 5000
     ports:
+    #  Port for sapper dev server
+      - 3000:3000
       # Port for svelte dev server
       - 5000:5000
       # Port for svelte live-reload
