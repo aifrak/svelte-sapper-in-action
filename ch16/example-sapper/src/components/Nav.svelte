@@ -14,6 +14,14 @@
         about
       </a>
     </li>
+    <li>
+      <a
+        aria-current={segment === 'employees' ? 'page' : undefined}
+        href="employees"
+      >
+        employees
+      </a>
+    </li>
 
     <!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
         the blog data when we hover over the link or tap it on a touchscreen -->
