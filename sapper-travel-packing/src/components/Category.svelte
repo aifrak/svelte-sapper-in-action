@@ -7,7 +7,7 @@
   import Dialog from './Dialog.svelte';
   import Item from './Item.svelte';
 
-  export let categories;
+  export let categoryMap;
   export let category;
   export let dnd;
   export let show;
@@ -28,23 +28,67 @@
   $: status = `${remaining} of ${total} remaining`;
   $: itemsToShow = sortOnName(items.filter((i) => shouldShow(show, i)));
 
-  function addItem() {
-    const duplicate = Object.values(categories).some((cat) =>
-      Object.values(cat.items).some((item) => item.name === itemName)
-    );
-    if (duplicate) {
-      message = `The item "${itemName}" already exists.`;
-      dialog.showModal();
-      return;
+  async function deleteItem(item) {
+    try {
+      const options = { method: 'DELETE' };
+      const path = `categories/${category._id}/items/${item.id}.json`;
+      const res = await fetch(path, options);
+      if (!res.ok) throw new Error('failed to delete item with id ' + item.id);
+
+      delete category.items[item.id];
+      category = category; // triggers update
+    } catch (e) {
+      console.error('checklist.svelte deleteItem:', e.message);
+    }
+  }
+
+  function handleBlur() {
+    editing = false;
+    // Signal to checklist.svelte that it should save the category.
+    dispatch('persist');
+  }
+
+  async function saveItem(item) {
+    const isNewItem = !item;
+
+    if (isNewItem) {
+      // The name cannot match that of any existing item in any category.
+      const duplicate = Object.values(categoryMap).some((cat) =>
+        Object.values(cat.items).some((item) => item.name === itemName)
+      );
+      if (duplicate) {
+        message = `The item "${itemName}" already exists.`;
+        dialog.showModal();
+        return;
+      }
+
+      item = { id: getGuid(), name: itemName, packed: false };
     }
 
-    const { items } = category;
-    const id = getGuid();
-    items[id] = { id, name: itemName, packed: false };
-    category.items = items;
-    itemName = '';
+    try {
+      const options = {
+        method: isNewItem ? 'POST' : 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item),
+      };
 
-    dispatch('persist');
+      const path = isNewItem
+        ? `categories/${category._id}/items.json`
+        : `categories/${category._id}/items/${item.id}.json`;
+      const res = await fetch(path, options);
+      if (!res.ok) {
+        //TODO: How can you get an error message?
+        const message = await res.text();
+        console.log('Category.svelte saveItem: message =', message);
+        throw new Error(message);
+      }
+
+      category.items[item.id] = item;
+      categoryMap = categoryMap; // triggers update
+      itemName = ''; // clears input
+    } catch (e) {
+      console.error('checklist.svelte saveItem:', e.message);
+    }
   }
 
   function shouldShow(show, item) {
@@ -55,20 +99,13 @@
     );
   }
 
-  function deleteItem(item) {
-    delete category.items[item.id];
-    category = category;
-
-    dispatch('persist');
-  }
-
   function spin(node, options) {
     const { easing, times = 1 } = options;
     return {
       ...options,
       css(t) {
         const eased = easing(t);
-        const degrees = 360 * times;
+        const degrees = 360 * times; // through which to spin
         return (
           'transform-origin: 50% 50%; ' +
           `transform: scale(${eased}) ` +
@@ -81,55 +118,52 @@
 
 <section
   class:hover={hovering}
+  in:scale={options}
+  out:spin={options}
   on:dragenter={() => (hovering = true)}
   on:dragleave={(event) => {
     const { localName } = event.target;
     if (localName === 'section') hovering = false;
   }}
   on:drop|preventDefault={(event) => {
-    dnd.drop(event, category.id);
+    dnd.drop(event, category._id);
     hovering = false;
   }}
   on:dragover|preventDefault
-  in:scale={options}
-  out:spin={options}
 >
-  <!-- {@debug status} -->
-
   <h2>
     {#if editing}
       <input
         bind:value={category.name}
-        on:blur={() => (editing = false)}
+        on:blur={handleBlur}
         on:keypress={blurOnKey}
       />
     {:else}
       <span on:click={() => (editing = true)}>{category.name}</span>
     {/if}
     <span class="status">{status}</span>
-    <button class="icon" on:click={() => dispatch('delete')}>
-      &#x1F5D1;
-    </button>
+    <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
   </h2>
 
-  <form on:submit|preventDefault={addItem}>
+  <form on:submit|preventDefault={() => saveItem()}>
     <label>
       New Item
       <input data-testid="item-input" required bind:value={itemName} />
     </label>
-    <button disabled={!itemName}>Add Item</button>
+    <button>Add Item</button>
   </form>
 
   <ul>
     {#each itemsToShow as item (item.id)}
       <div animate:flip>
         <!-- This bind causes the category object to update
-        when the item packed value is toggled. -->
+            when the item packed value is toggled. -->
         <Item
           bind:item
-          on:delete={() => deleteItem(item)}
-          categoryId={category.id}
+          categoryId={category._id}
           {dnd}
+          on:delete={() => deleteItem(item)}
+          on:persist={() => saveItem(item)}
         />
       </div>
     {:else}
@@ -170,7 +204,7 @@
     display: inline-block;
     margin: var(--padding);
     padding: calc(var(--padding) * 2);
-    padding-top: var(--padding);
+    padding-top: 0;
     vertical-align: top;
   }
 

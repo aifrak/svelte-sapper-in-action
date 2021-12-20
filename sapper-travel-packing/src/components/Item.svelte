@@ -3,36 +3,43 @@
   import { blurOnKey } from '../util';
 
   export let categoryId;
-  export let dnd; // dnd = drag and drop
+  export let dnd;
   export let item;
 
   const dispatch = createEventDispatcher();
-
   let editing = false;
 
-  $: if (editing) console.log('editing item', item.name);
+  function handleBlur() {
+    editing = false;
+    // Signal to Category.svelte that it should save the item.
+    dispatch('persist');
+  }
 </script>
 
-<li
-  draggable="true"
-  on:dragstart={(event) => dnd.drag(event, categoryId, item.id)}
->
+<li>
   <input
     aria-label="Toggle Packed"
     type="checkbox"
     bind:checked={item.packed}
+    on:change={() => dispatch('persist')}
   />
   {#if editing}
+    <!-- svelte-ignore a11y-autofocus -->
     <input
       aria-label="Edit Name"
       autofocus
       bind:value={item.name}
-      on:blur={() => (editing = false)}
+      on:blur={handleBlur}
       on:keydown={blurOnKey}
       type="text"
     />
   {:else}
-    <span class="packed-{item.packed}" on:click={() => (editing = true)}>
+    <span
+      class="packed-{item.packed}"
+      draggable={true}
+      on:dragstart={(event) => dnd.drag(event, categoryId, item.id)}
+      on:click={() => (editing = true)}
+    >
       {item.name}
     </span>
   {/if}
@@ -68,6 +75,6 @@
   }
 
   span {
-    margin: 0 10px;
+    margin: 0 0.5rem;
   }
 </style>

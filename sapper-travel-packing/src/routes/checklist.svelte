@@ -1,93 +1,155 @@
+<script context="module">
+  export async function preload() {
+    try {
+      const res = await this.fetch('categories.json');
+      if (res.ok) {
+        const categories = await res.json();
+
+        // Create a map of category ids to category objects.
+        const categoryMap = categories.reduce((acc, category) => {
+          acc[category._id] = category;
+          return acc;
+        }, {});
+
+        return { categoryMap };
+      } else {
+        const msg = await res.text();
+        this.error(res.statusCode, 'checklist preload: ' + msg);
+      }
+    } catch (e) {
+      this.error(500, 'checklist preload: ' + e.message);
+    }
+  }
+</script>
+
 <script>
-  import { onMount } from 'svelte';
   import { flip } from 'svelte/animate';
   import Category from '../components/Category.svelte';
   import Dialog from '../components/Dialog.svelte';
-  import { getGuid, sortOnName } from '../util';
+  import { sortOnName } from '../util';
+
+  export let categoryMap;
 
   const options = { duration: 700 };
 
-  let dialog = null;
   let categoryArray = [];
-  let categories = {};
   let categoryName;
+  let dialog = null;
   let message = '';
   let show = 'all';
-  let restored = false;
+
+  $: categoryArray = sortOnName(Object.values(categoryMap));
 
   let dragAndDrop = {
-    drag(event, categoryId, itemId) {
+    drag: (event, categoryId, itemId) => {
       const data = { categoryId, itemId };
       event.dataTransfer.setData('text/plain', JSON.stringify(data));
     },
-    drop(event, categoryId) {
+    drop: async (event, newCategoryId) => {
       const json = event.dataTransfer.getData('text/plain');
       const data = JSON.parse(json);
 
-      const category = categories[data.categoryId];
-      const item = category.items[data.itemId];
-      delete category.items[data.itemId];
+      try {
+        const oldCategory = categoryMap[data.categoryId];
+        const item = oldCategory.items[data.itemId];
 
-      categories[categoryId].items[data.itemId] = item;
+        // Delete the item from the old category.
+        let options = {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item),
+        };
+        let path = `categories/${oldCategory._id}/items/${item.id}.json`;
+        let res = await fetch(path, options);
+        if (!res.ok) throw new Error(await res.text());
 
-      categories = categories;
+        // Add the item to the new category.
+        const newCategory = categoryMap[newCategoryId];
+        options = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item),
+        };
+        path = `categories/${newCategory._id}/items.json`;
+        res = await fetch(path, options);
+        if (!res.ok) throw new Error(await res.text());
+
+        // Update the UI.
+        delete oldCategory.items[data.itemId];
+        newCategory.items[item.id] = item;
+        categoryMap = categoryMap; // triggers update
+      } catch (e) {
+        console.error('checklist.svelte drop:', e.message);
+      }
     },
   };
 
-  $: categoryArray = sortOnName(Object.values(categories));
-
-  function addCategory() {
-    const duplicate = Object.values(categories).some(
-      (cat) => cat.name === categoryName
-    );
-    if (duplicate) {
-      message = `The category "${categoryName}" already exists.`;
-      dialog.showModal();
-      return;
-    }
-
-    const id = getGuid();
-    categories[id] = { id, name: categoryName, items: {} };
-    categories = categories;
-    categoryName = '';
-  }
-
   function clearAllChecks() {
-    for (const category of Object.values(categories)) {
+    for (const category of Object.values(categoryMap)) {
       for (const item of Object.values(category.items)) {
         item.packed = false;
       }
     }
-    categories = categories;
+    categoryMap = categoryMap; // triggers update
   }
 
-  function deleteCategory(category) {
+  async function deleteCategory(category) {
     if (Object.values(category.items).length) {
       message = 'This category is not empty.';
       dialog.showModal();
       return;
     }
 
-    delete categories[category.id];
-    categories = categories;
-  }
-
-  // From here, it should stay at the bottom
-  // "onMount" is used because "restore" is called only from the browser
-  onMount(restore);
-
-  $: if (categories) persist();
-
-  function persist() {
-    // "process.browser" is to be sure it is executed only from the browser
-    if (process.browser && restored) {
-      localStorage.setItem('travel-packing', JSON.stringify(categories));
+    const id = category._id;
+    try {
+      const options = { method: 'DELETE' };
+      // This invokes the "del" middleware function
+      // defined in [id].json.js.
+      const res = await fetch(`categories/${id}.json`, options);
+      if (!res.ok) throw new Error('failed to delete category with id ' + id);
+      delete categoryMap[id];
+      categoryMap = categoryMap; // triggers update
+    } catch (e) {
+      console.error('checklist.svelte deleteCategory:', e.message);
     }
   }
-  function restore() {
-    const text = localStorage.getItem('travel-packing');
-    if (text && text !== '{}') categories = JSON.parse(text);
-    restored = true;
+
+  async function saveCategory(category) {
+    if (!category) {
+      // adding a new category
+      const duplicate = Object.values(categoryMap).some(
+        (cat) => cat.name === categoryName
+      );
+      if (duplicate) {
+        message = `The category "${category.name}" already exists.`;
+        dialog.showModal();
+        return;
+      }
+      category = { name: categoryName, items: {} };
+    }
+
+    const id = category._id;
+
+    try {
+      const options = {
+        method: id ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(category),
+      };
+
+      const path = id ? `categories/${id}.json` : 'categories.json';
+      const res = await fetch(path, options);
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.error);
+
+      categoryMap[result._id] = result;
+      categoryMap = categoryMap; // triggers update
+
+      categoryName = ''; // clear the input
+    } catch (e) {
+      console.error('checklist.svelte saveCategory:', e.message);
+    }
   }
 </script>
 
@@ -97,7 +159,7 @@
 
 <section>
   <header>
-    <form on:submit|preventDefault={addCategory}>
+    <form on:submit|preventDefault={() => saveCategory()}>
       <label>
         New Category
         <input
@@ -106,9 +168,9 @@
           bind:value={categoryName}
         />
       </label>
-      <button disabled={!categoryName}>Add Category</button>
-      <a class="button logout-btn" href="/">Log Out</a>
+      <button>Add Category</button>
     </form>
+    <a class="button logout-btn" href="/">Log Out</a>
     <p>
       Suggested categories include Backpack, Clothes,
       <br />
@@ -130,32 +192,31 @@
           <input name="show" type="radio" value="unpacked" bind:group={show} />
           Unpacked
         </label>
-
-        <button class="clear" on:click={clearAllChecks}>Clear All Checks</button
-        >
+        <button class="clear" on:click={clearAllChecks}>
+          Clear All Checks
+        </button>
       </div>
     </fieldset>
   </header>
 
   <div class="categories">
-    {#each categoryArray as category (category.id)}
-      <div class="wrapper" animate:flip={options}>
+    {#each categoryArray as category (category._id)}
+      <div class="animate" animate:flip={options}>
         <Category
           bind:category
-          {categories}
+          {categoryMap}
+          dnd={dragAndDrop}
           {show}
           on:delete={() => deleteCategory(category)}
-          on:persist={persist}
-          dnd={dragAndDrop}
+          on:persist={() => saveCategory(category)}
         />
       </div>
     {/each}
   </div>
-
-  <Dialog title="Checklist" bind:dialog>
-    <div>{message}</div>
-  </Dialog>
 </section>
+<Dialog title="Checklist" bind:dialog>
+  <div>{message}</div>
+</Dialog>
 
 <style>
   .categories {
@@ -211,9 +272,5 @@
 
   .animate {
     display: inline-block;
-  }
-
-  .wrapper {
-    display: inline;
   }
 </style>
