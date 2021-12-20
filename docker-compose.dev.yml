@@ -16,6 +16,14 @@ services:
       # Port for svelte live-reload
       - 35729:35729
 
+  # Default exposed port is 27017
+  mongo:
+    image: mongo:5.0.5-focal
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
   # Service to run cypress (npm run "cy:open" and npm run "cy:run")
   cypress:
     # Setup inspired from https://www.cypress.io/blog/2019/05/02/run-cypress-with-a-single-docker-command/
