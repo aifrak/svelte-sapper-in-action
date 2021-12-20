@@ -13,4 +13,10 @@ npm install
 npm run start:dev
 ```
 
-3. Open your browser at `localhost:3000`.
+3. Fill the database:
+
+```bash
+node scripts/initDb.js
+```
+
+4. Open your browser at `localhost:3000`.
