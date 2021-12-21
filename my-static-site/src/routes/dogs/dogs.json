@@ -1,0 +1,30 @@
+{
+  "Dasher": {
+    "name": "Dasher",
+    "gender": "male",
+    "breed": "Whippet",
+    "imageUrl": "./images/whippet.jpg",
+    "description": "The sleek, sweet-faced Whippet, ..."
+  },
+  "Maisey": {
+    "name": "Maisey",
+    "gender": "female",
+    "breed": "Treeing Walker Coonhound",
+    "imageUrl": "./images/treeing-walker-coonhound.jpg",
+    "description": "A smart, brave, and sensible hunter, ..."
+  },
+  "Ramsay": {
+    "name": "Ramsay",
+    "gender": "male",
+    "breed": "Native American Indian Dog (NAID)",
+    "imageUrl": "./images/native-american-indian-dog.jpg",
+    "description": "The NAID is one of friendliest dog breeds. ..."
+  },
+  "Oscar": {
+    "name": "Oscar ",
+    "gender": "male",
+    "breed": "German Shorthaired Pointer (GSP)",
+    "imageUrl": "./images/german-shorthaired-pointer.jpg",
+    "description": "Male German Shorthaired Pointers stand between ..."
+  }
+}
