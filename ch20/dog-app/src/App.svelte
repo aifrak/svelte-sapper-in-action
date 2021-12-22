@@ -1,5 +1,6 @@
 <script lang="ts">
   import Dog from './Dog.svelte';
+  import DogMd from './Dog.md';
   import { add } from './math';
 
   /*
@@ -22,6 +23,8 @@
 {#each dogs as { name, breed, gender }}
   <Dog {name} {breed} {gender} />
 {/each}
+
+<DogMd />
 
 <div>sum in ts = {sum}</div>
 <!-- The same type error occurs -->
