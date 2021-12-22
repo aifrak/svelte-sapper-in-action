@@ -12,3 +12,9 @@
 {#each dogs as { name, breed, gender }}
   <Dog {name} {breed} {gender} />
 {/each}
+
+<style global>
+  body {
+    background-color: linen;
+  }
+</style>
